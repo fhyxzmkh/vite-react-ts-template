@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "@heroui/react";
+import { notifications } from "@mantine/notifications";
 
 // 创建 axios 实例
 const request = axios.create({
@@ -30,7 +30,14 @@ request.interceptors.response.use(
     } else {
       // 业务错误统一处理 (比如 code 为 400, 500 等)
       console.error(`业务错误: ${res.message || "未知错误"}`);
-      toast.danger(res.message || "系统繁忙，请稍后再试"); // 触发全局提示
+
+      const msg = res.message || "系统繁忙，请稍后再试";
+      notifications.show({
+        title: `Notification`,
+        message: msg,
+        position: "top-center",
+        color: "red",
+      });
 
       return Promise.reject(new Error(res.message || "Error"));
     }
@@ -66,7 +73,14 @@ request.interceptors.response.use(
     }
 
     console.error(errorMessage);
-    toast.danger(errorMessage); // 统一弹出错误提示
+
+    notifications.show({
+      title: `Notification`,
+      message: errorMessage,
+      position: "top-center",
+      color: "red",
+    });
+
     return Promise.reject(error);
   },
 );

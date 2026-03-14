@@ -1,9 +1,14 @@
-import React from "react"; // 记得引入 React 以使用 StrictMode
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
-import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 
 // 实例化 QueryClient
 const queryClient = new QueryClient();
@@ -13,8 +18,8 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   scrollRestoration: true,
-  // 🌟 核心优化：将 queryClient 注入到 router 的上下文中
-  // 这样你就能在每个路由的 loader 里通过 context.queryClient 使用 react-query 了
+  // 🌟 将 queryClient 注入到 router 的上下文中
+  // 这样就能在每个路由的 loader 里通过 context.queryClient 使用 react-query 了
   context: {
     queryClient,
   },
@@ -34,9 +39,12 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <MantineProvider>
+        <Notifications />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </MantineProvider>
     </React.StrictMode>,
   );
 }

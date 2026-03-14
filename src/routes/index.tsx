@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@heroui/react";
+import { Button } from "@mantine/core";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
